@@ -1,0 +1,27 @@
+package org.example;
+
+
+//data og strukturen for enkelte innlegg.
+
+public class DiaryEntry {
+    private String tittel;
+    private String forfatter;
+    private String innhold;
+
+    public DiaryEntry(String tittel, String forfatter, String innhold) { //konstruktør
+        this.tittel = tittel;
+        this.forfatter = forfatter;
+        this.innhold = innhold;
+    }
+
+    public String getTittel() { return tittel; } //en Getter, setup nødvendig for å kjøre programmet som ønsket.
+    public String getForfatter() { return forfatter; }
+    public String getInnhold() { return innhold; }
+
+    @Override //erstatter toString() fra objekt klassen
+    public String toString() {
+        return "Tittel: " + tittel + "\n" + //for tidligere dagbokinlegg
+                "Forfatter: " + forfatter + "\n" + //fyller inn noe alerede lagret
+                "Innhold: " + innhold + "\n";
+    }
+}
