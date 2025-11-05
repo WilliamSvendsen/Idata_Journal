@@ -1,0 +1,83 @@
+package org.example;
+
+import java.util.Scanner; //googlet for denne, veldig smart, lar den reagere på brukerinnput når programmet kjører
+
+
+// Hovedsakelig "visual" interface, kaller også metoder fra Diary for å Legge til/Vise innlegg.
+// Brukerinteraksjonen
+
+public class Main {
+    public static void main(String[] args) { //guh, vet ikke hvorfor faen dette fungerer. Brukte google og debugger, KI foreslo dette.
+        Scanner scanner = new Scanner(System.in); //Scanner som "scanner" et innput fra brukeren
+        Diary dagbok = new Diary(); //for ny dagbok inegg
+
+        while (true) { //for uendelig løkke! virker veldig redneck, men fungerer.
+            System.out.println("\n--- Min Dagbok ---"); //menynavn og struktur foreslått av GPT
+            System.out.println("1. Legg til nytt innlegg");
+            System.out.println("2. Vis alle innlegg");
+            System.out.println("3. Avslutt");
+            System.out.print("Velg et alternativ: ");
+
+            String valgStr = scanner.nextLine().trim();
+            if (valgStr.isEmpty()) { //Fikset etter debugging når jeg skrev en del mellomrom og så noe, nå fikser den dette :)
+                System.out.println("Write something, dumbass");
+                continue;
+            }
+
+            int valg;
+            try {
+                valg = Integer.parseInt(valgStr);
+            } catch (NumberFormatException e) {
+                System.out.println("Skriv et tall (1-3)."); //litt som World of zuul, den gjør noe basert på hva jeg legger inn.
+                continue;
+            }
+
+            switch (valg) { //edit: linje 36 notat er 1.0 notater
+                // Opprinnelig if statements, men switcher fungerte bedre
+                // 2.0 notater: Nå bruker jeg begge to lmao
+                case 1 -> { //Case 1 og 3 er en 2.0.
+                    String tittel; //dette skal sørge for at jeg ikke kan ha tittel, forfatter og innhold som ingenting!
+                    do {
+                        System.out.print("Tittel: ");
+                        tittel = scanner.nextLine().trim();
+                        if (tittel.isEmpty()) { //hvis tittelen er tom, så ber den meg gjøre den ikke tom!
+                            System.out.println("Tittel empty, please unempty tittel");
+                        }
+                    } while (tittel.isEmpty());
+
+                    String forfatter;
+                    do {
+                        System.out.print("Forfatter: ");
+                        forfatter = scanner.nextLine().trim();
+                        if (forfatter.isEmpty()) {
+                            System.out.println("Forfatter empty, please unempty");
+                        }
+                    } while (forfatter.isEmpty());
+
+                    String innhold;
+                    do {
+                        System.out.print("Innhold: ");
+                        innhold = scanner.nextLine().trim();
+                        if (innhold.isEmpty()) {
+                            System.out.println("Innhold empty, please unempty.");
+                        }
+                    } while (innhold.isEmpty());
+
+                    dagbok.leggTilInnlegg(tittel, forfatter, innhold);
+                    System.out.println("Innlegg lagt til!");
+                }
+                case 2 -> dagbok.visAlleInnlegg();
+                case 3 -> {
+                    String bekreft = scanner.nextLine();
+                    System.out.println("Er du sikker på at du vil avslutte? (j/n)");
+
+                    if (bekreft.equals("j")) { //foreløpig feil her. Noe er fikset med debugging. den ber om j/n input for sent.
+                        scanner.close();
+                        return;
+                    }
+                }
+                default -> System.out.println("Piss off"); //hvis jeg ikke skriver jackshit
+            }
+        }
+    }
+}
