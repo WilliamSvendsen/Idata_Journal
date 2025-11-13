@@ -7,11 +7,12 @@ import java.util.Scanner; //googlet for denne, veldig smart, lar den reagere på
 // Brukerinteraksjonen
 
 public class Main {
-    public static void main(String[] args) { //guh, vet ikke hvorfor faen dette fungerer. Brukte google og debugger, KI foreslo dette.
+    public static void main(String[] args) { //Foreslått av Chat-GPT, String[] args er parameter for kommando-linje-inputs, [] er fylt med et tall
         Scanner scanner = new Scanner(System.in); //Scanner som "scanner" et innput fra brukeren
-        Diary dagbok = new Diary(); //for ny dagbok inegg
+        Diary dagbok = new Diary(); //for ny dagbok innlegg
+        boolean programKjører = true; // "Goalpost", når denne er false slutter løkken.
 
-        while (true) { //for uendelig løkke! virker veldig redneck, men fungerer.
+        while (programKjører) { //Så lenge denne er true (er true ovenfor), kjører programmet
             System.out.println("\n--- Min Dagbok ---"); //menynavn og struktur foreslått av GPT
             System.out.println("1. Legg til nytt innlegg");
             System.out.println("2. Vis alle innlegg");
@@ -19,14 +20,14 @@ public class Main {
             System.out.print("Velg et alternativ: ");
 
             String valgStr = scanner.nextLine().trim();
-            if (valgStr.isEmpty()) { //Fikset etter debugging når jeg skrev en del mellomrom og så noe, nå fikser den dette :)
-                System.out.println("Write something, dumbass");
+            if (valgStr.isEmpty()) { //Sjekker om brukeren skriver ingenting
+                System.out.println("Skriv et tall fra 1-3!"); //utropsteng er for testing
                 continue;
             }
 
-            int valg;
+            int valg; //Kjører dette hvis noe er skrevet
             try {
-                valg = Integer.parseInt(valgStr);
+                valg = Integer.parseInt(valgStr); //Konverterer "valg" til int
             } catch (NumberFormatException e) {
                 System.out.println("Skriv et tall (1-3)."); //litt som World of zuul, den gjør noe basert på hva jeg legger inn.
                 continue;
@@ -41,7 +42,7 @@ public class Main {
                         System.out.print("Tittel: ");
                         tittel = scanner.nextLine().trim();
                         if (tittel.isEmpty()) { //hvis tittelen er tom, så ber den meg gjøre den ikke tom!
-                            System.out.println("Tittel empty, please unempty tittel");
+                            System.out.println("Helst lag en tittel");
                         }
                     } while (tittel.isEmpty());
 
@@ -50,7 +51,7 @@ public class Main {
                         System.out.print("Forfatter: ");
                         forfatter = scanner.nextLine().trim();
                         if (forfatter.isEmpty()) {
-                            System.out.println("Forfatter empty, please unempty");
+                            System.out.println("Helst lag en forfatter");
                         }
                     } while (forfatter.isEmpty());
 
@@ -59,7 +60,7 @@ public class Main {
                         System.out.print("Innhold: ");
                         innhold = scanner.nextLine().trim();
                         if (innhold.isEmpty()) {
-                            System.out.println("Innhold empty, please unempty.");
+                            System.out.println("Helst lag ett innhold.");
                         }
                     } while (innhold.isEmpty());
 
@@ -68,15 +69,15 @@ public class Main {
                 }
                 case 2 -> dagbok.visAlleInnlegg();
                 case 3 -> {
+                    System.out.println("Er du sikker på at du vil avslutte? (j/n)"); //Ber at brukeren bekrefter at de skal avslutte
                     String bekreft = scanner.nextLine();
-                    System.out.println("Er du sikker på at du vil avslutte? (j/n)");
 
-                    if (bekreft.equals("j")) { //foreløpig feil her. Noe er fikset med debugging. den ber om j/n input for sent.
+                    if (bekreft.equals("j")) {
                         scanner.close();
-                        return;
+                        programKjører = false; //Avslutter Løkken
                     }
                 }
-                default -> System.out.println("Piss off"); //hvis jeg ikke skriver jackshit
+                default -> System.out.println("ERROR, helst skriv noe"); //hvis jeg ikke skriver noe
             }
         }
     }
