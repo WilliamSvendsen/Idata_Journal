@@ -1,2 +1,1 @@
-# Idata_Journal
-Min Journalkode
+Dette viser de ulike klassene i mitt projekt, skrevet i IntelliJ
