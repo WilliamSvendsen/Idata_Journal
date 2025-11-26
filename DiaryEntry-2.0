@@ -1,49 +1,51 @@
 package org.example;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * data og strukturen for enkelte innlegg.
+ * Register for objects i DiaryEntry
  */
 
-public class DiaryEntry {
-    private String title;
-    private String author;
-    private String entry;
-    private String dateTime;
+public class Diary {
+    private final List<DiaryEntry> entries; //flertallsnavn
 
-    private static final DateTimeFormatter DISPLAY_FORMAT = DateTimeFormatter.ofPattern("dd/mm/yyyy HH:mm:ss");
-
-    public DiaryEntry(String title, String author, String entry) { //konstruktør
-        this.title = title;
-        this.author = author;
-        this.entry = entry;
-        this.dateTime = generateDateTime();
+    public Diary() {
+        this.entries = new ArrayList<>();
     }
-
-    private String generateDateTime() {
-        return LocalDateTime.now().format(DISPLAY_FORMAT); //bruker systemets dato og tid for å late tidsstempel
-    }
-/**
- * Henter tittel, forfatter, dato og tid, og innhold. Getter gir lesetilgang til 'private' felt
- */
-    public String getTitle() { return title; } //en Getter, setup nødvendig for å kjøre programmet som ønsket.
-    public String getAuthor() { return author; }
-    public String getEntry() { return entry; }
-    public String getDateTime() { return dateTime; }
-
 
     /**
-     * Skriver ut innlegget i lesbar format
-     * toString() brukes for når objektet blir direkte printet, gjør det enklere å vise.
-      * @return
+     * Lager nytt innlegg. Parameter valideres av DiaryEntry
+     *
+
+     * @param title
+     * @param author
+     * @param entry
      */
-    @Override //erstatter toString() fra objekt klassen
-    public String toString() {
-        return "Tittel: " + title + "\n" + //for tidligere dagbokinnlegg
-                "Forfatter: " + author + "\n" + //fyller inn noe alerede lagret
-                "Dato og Tid: " + dateTime + "\n" +
-                "Innhold: " + entry + "\n";
+
+    public void addEntry(String title, String author, String entry) {
+        DiaryEntry newEntry = new DiaryEntry(title, author, entry);
+        entries.add(newEntry);
+    }
+
+    /**
+     * viser dagbok innlegg, hvis noen finnes
+     */
+
+    public void showAllEntries() { //dette er for #2, skal la meg se tidligere skrevet dagbøker.
+        if (entries.isEmpty()) {
+            System.out.println("Ingen dagbokinnlegg."); //melding hvis ingen innlegg finnes
+            return;
+        }
+        for (DiaryEntry entry : entries) { // hvis if statementet ikke går gjennom (altså det er et inlegg)
+            System.out.println(entry);
+            System.out.println("---------------------------");
+        }
+    }
+    /**
+     * skal returnere antall innlegg (feks 2 innlegg, 5 innlegg, 0 innlegg
+     */
+    public int size() {
+        return entries.size();
     }
 }
