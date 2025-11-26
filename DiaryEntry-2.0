@@ -1,27 +1,49 @@
 package org.example;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-//data og strukturen for enkelte innlegg.
+/**
+ * data og strukturen for enkelte innlegg.
+ */
 
 public class DiaryEntry {
-    private String tittel;
-    private String forfatter;
-    private String innhold;
+    private String title;
+    private String author;
+    private String entry;
+    private String dateTime;
 
-    public DiaryEntry(String tittel, String forfatter, String innhold) { //konstruktør
-        this.tittel = tittel;
-        this.forfatter = forfatter;
-        this.innhold = innhold;
+    private static final DateTimeFormatter DISPLAY_FORMAT = DateTimeFormatter.ofPattern("dd/mm/yyyy HH:mm:ss");
+
+    public DiaryEntry(String title, String author, String entry) { //konstruktør
+        this.title = title;
+        this.author = author;
+        this.entry = entry;
+        this.dateTime = generateDateTime();
     }
 
-    public String getTittel() { return tittel; } //en Getter, setup nødvendig for å kjøre programmet som ønsket.
-    public String getForfatter() { return forfatter; }
-    public String getInnhold() { return innhold; }
+    private String generateDateTime() {
+        return LocalDateTime.now().format(DISPLAY_FORMAT); //bruker systemets dato og tid for å late tidsstempel
+    }
+/**
+ * Henter tittel, forfatter, dato og tid, og innhold. Getter gir lesetilgang til 'private' felt
+ */
+    public String getTitle() { return title; } //en Getter, setup nødvendig for å kjøre programmet som ønsket.
+    public String getAuthor() { return author; }
+    public String getEntry() { return entry; }
+    public String getDateTime() { return dateTime; }
 
+
+    /**
+     * Skriver ut innlegget i lesbar format
+     * toString() brukes for når objektet blir direkte printet, gjør det enklere å vise.
+      * @return
+     */
     @Override //erstatter toString() fra objekt klassen
     public String toString() {
-        return "Tittel: " + tittel + "\n" + //for tidligere dagbokinlegg
-                "Forfatter: " + forfatter + "\n" + //fyller inn noe alerede lagret
-                "Innhold: " + innhold + "\n";
+        return "Tittel: " + title + "\n" + //for tidligere dagbokinnlegg
+                "Forfatter: " + author + "\n" + //fyller inn noe alerede lagret
+                "Dato og Tid: " + dateTime + "\n" +
+                "Innhold: " + entry + "\n";
     }
 }
