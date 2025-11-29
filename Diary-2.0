@@ -1,33 +1,78 @@
 package org.example;
 
-import java.util.ArrayList; //googlet litt etter lister
+import java.util.ArrayList;
 import java.util.List;
 
-
-// Metoder for nye innlegg, metode for å vise innlegg, lagrer liste med innlegg.
+/**
+ * Register for objects i DiaryEntry
+ */
 
 public class Diary {
-    private final List<DiaryEntry> innlegg; //opretter ny privat liste
-    //Final ikke nødvendig, men å holde denne uendret gjør den mer "robust"
+    private final List<DiaryEntry> entries; //flertallsnavn
 
     public Diary() {
-        this.innlegg = new ArrayList<>(); //konstruktør for Diary, skal lage en ny tom arraylist når en ny "diary" lages
-    } //fordi "this."
-
-    public void leggTilInnlegg(String tittel, String forfatter, String innhold) {
-        innlegg.add(new DiaryEntry(tittel, forfatter, innhold)); //Nødvendig settup, tror jeg, tidlig kjørte koden uten dette
-        // men koden kjører også med dette, og jeg får mindre feil når jeg bruker dette, lmao.
-        // Edit: Nødvendig nå, trengs for at main skal fungere. Må bruke eksisterende metode
+        this.entries = new ArrayList<>();
     }
 
-    public void visAlleInnlegg() { //dette er for #2, skal la meg se tidligere skrevet dagbøker.
-        if (innlegg.isEmpty()) {
-            System.out.println("Ingen dagbokinnlegg."); //sjekker først om den er tom
-            return; // TO DO: lagre dagbokentries som tekstfil annet sted en intelliJ
+    /**
+     * funksjonalitet for å søke etter entries ved bruk av søkeord
+     * foreløpig gir kun feilmeldinger hvis ingen søkeord er brukt, eller søkeord som ikke er i innhold
+     * TODO: lag en som kan søke etter entries, og test
+     *
+     * @param searchWord
+     */
+    public void search(String searchWord) {
+        if (searchWord == null || searchWord.isEmpty()) {
+            System.out.println("Vennligst søk etter et ord");
+            return;
         }
-        for (DiaryEntry entry : innlegg) { // hvis if statementet ikke går gjennom (altså det er et inlegg)
+        String lower =  searchWord.toLowerCase();
+        boolean found = false;
+        for (DiaryEntry entry : entries) {
+            if (entry.getTitle().toLowerCase().contains(lower) ||
+                entry.getAuthor().toLowerCase().contains(lower)) {
+                System.out.println(entry);
+                System.out.println("------------");
+                found = true;
+            }
+        }
+        if (!found) {
+            System.out.println("Fant ingen entries som har søkeordet \"" +searchWord+"\".");
+        }
+    }
+
+
+    /**
+     * Lager nytt innlegg. Parameter valideres av DiaryEntry
+     *
+     * @param title
+     * @param author
+     * @param entry
+     */
+
+    public void addEntry(String title, String author, String entry) {
+        DiaryEntry newEntry = new DiaryEntry(title, author, entry);
+        entries.add(newEntry);
+    }
+
+    /**
+     * viser dagbok innlegg, hvis noen finnes
+     */
+
+    public void showAllEntries() { //dette er for #2, skal la meg se tidligere skrevet dagbøker.
+        if (entries.isEmpty()) {
+            System.out.println("Ingen dagbokinnlegg."); //melding hvis ingen innlegg finnes
+            return;
+        }
+        for (DiaryEntry entry : entries) { // hvis if statementet ikke går gjennom (altså det er et inlegg)
             System.out.println(entry);
             System.out.println("---------------------------");
         }
+    }
+    /**
+     * skal returnere antall innlegg (feks 2 innlegg, 5 innlegg, 0 innlegg)
+     */
+    public int size() {
+        return entries.size();
     }
 }
