@@ -1,47 +1,55 @@
 package org.example;
 
-import java.util.Scanner; //googlet for denne, veldig smart, lar den reagere på brukerinnput når programmet kjører
+import java.util.Scanner;
 
 
-// Hovedsakelig "visual" interface, kaller også metoder fra Diary for å Legge til/Vise innlegg.
-// Brukerinteraksjonen
+/**
+ * For user-interface. Kaller metoder fra Diary for å legge til eller vise innlegg.
+ */
 
 public class Main {
-    public static void main(String[] args) { //Foreslått av Chat-GPT, String[] args er parameter for kommando-linje-inputs, [] er fylt med et tall
-        Scanner scanner = new Scanner(System.in); //Scanner som "scanner" et innput fra brukeren
-        Diary diary = new Diary(); //for ny dagbok innlegg
-        boolean programRunning = true; // "Goalpost", når denne er false slutter løkken.
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Diary diary = new Diary();
+        boolean isProgramRunning = true;
 
-        while (programRunning) { //Så lenge denne er true (er true ovenfor), kjører programmet
-            System.out.println("\n--- Min Dagbok ---"); //menynavn og struktur foreslått av GPT
+        while (isProgramRunning) {
+            System.out.println("\n--- Min Dagbok ---");
             System.out.println("1. Legg til nytt innlegg");
             System.out.println("2. Vis alle innlegg");
-            System.out.println("3. Avslutt");
+            System.out.println("3. Slett et innlegg");
+            System.out.println("4. Søk etter et innlegg");
+            System.out.println("5. Avslutt");
             System.out.print("Velg et alternativ: ");
 
+
+            //Sjekker at brukeren har skrevet noe.
             String choiceStr = scanner.nextLine().trim();
-            if (choiceStr.isEmpty()) { //Sjekker om brukeren skriver ingenting
-                System.out.println("Skriv et tall fra 1-3!"); //utropsteng er for testing
+            if (choiceStr.isEmpty()) {
+                System.out.println("Skriv et tall fra 1-5!");
                 continue;
             }
 
-            int choice; //Kjører dette hvis noe er skrevet
+            int choice;
             try {
-                choice = Integer.parseInt(choiceStr); //Konverterer "choice" til int
+                choice = Integer.parseInt(choiceStr);
             } catch (NumberFormatException e) {
-                System.out.println("Skriv et tall (1-3)."); //litt som World of zuul, den gjør noe basert på hva jeg legger inn.
+                System.out.println("Skriv et tall (1-5).");
                 continue;
             }
 
-            switch (choice) { //edit: linje 36 notat er 1.0 notater
-                // Opprinnelig if statements, men switcher fungerte bedre
-                // 2.0 notater: Nå bruker jeg begge to lmao
-                case 1 -> { //Case 1 og 3 er en 2.0.
-                    String title; //dette skal sørge for at jeg ikke kan ha tittel, author og entry som ingenting!
+             /**
+             * Case 1-5 kjøres basert på bruker input.
+             * Forventet funskon(er) for hver case er vist ovenfor.
+             */
+
+            switch (choice) {
+                case 1 -> {
+                    String title;
                     do {
                         System.out.print("Tittel: ");
                         title = scanner.nextLine().trim();
-                        if (title.isEmpty()) { //hvis tittelen er tom, så ber den meg gjøre den ikke tom!
+                        if (title.isEmpty()) {
                             System.out.println("Helst lag en tittel");
                         }
                     } while (title.isEmpty());
@@ -60,7 +68,7 @@ public class Main {
                         System.out.print("Innhold: ");
                         entry = scanner.nextLine().trim();
                         if (entry.isEmpty()) {
-                            System.out.println("Helst lag ett entry.");
+                            System.out.println("Helst lag en entry.");
                         }
                     } while (entry.isEmpty());
 
@@ -71,22 +79,41 @@ public class Main {
                     diary.showAllEntries();
                     System.out.println("Antall innlegg: " + diary.size());
                 }
-                case 3 -> {
-                    System.out.println("Er du sikker på at du vil avslutte? (j/n)"); //Ber at brukeren bekrefter at de skal avslutte
-                    String confirm = scanner.nextLine();
 
-                    if (confirm.equals("j")) { //kjører hvis "confirm" er j,
-                        scanner.close();
-                        programRunning = false; //Avslutter Løkken
+                case 3 -> {
+                    diary.showAllEntries();
+                    System.out.println("Skriv nummer til innlegg som skal slettes, (1-" + diary.size() + "):");
+                    String numStr = scanner.nextLine();
+                    try {
+                        int num = Integer.parseInt(numStr);
+                        boolean deletedSuccessfully = diary.deleteEntry(num - 1);
+                        if (deletedSuccessfully) {
+                            System.out.println("Innlegg slettet!");
+                        } else {
+                            System.out.println("Skriv inn et gyldig nummer");
+                        }
+                    } catch (NumberFormatException ex) {
+                        System.out.println("Skriv inn et gyldig nummer");
                     }
                 }
-                case 4 -> {
+                case 4 -> { //for å søke
                     System.out.println("Søk etter innlegg: ");
                     String searchWord = scanner.nextLine();
                     diary.search(searchWord);
                 }
-                default -> System.out.println("ERROR, helst skriv noe"); //hvis jeg ikke skriver noe
+                case 5 -> {
+                    System.out.println("Er du sikker på at du vil avslutte? (j/n)");
+                    String confirm = scanner.nextLine();
+
+                    if (confirm.equals("j")) { //sjekker at brukeren har skrevet j, eller noe annet.
+                        scanner.close();
+                        isProgramRunning = false;
+                    }
+                }
+
+                default -> System.out.println("Ugyldig valg. Velg et tall mellom 1-5"); //hvis brukerne ikke skriver noe
             }
         }
     }
 }
+
