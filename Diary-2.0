@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Register for objects i DiaryEntry
+ * Register for DiaryEntry-objekter.
  */
 
 public class Diary {
@@ -15,12 +15,9 @@ public class Diary {
     }
 
     /**
-     * funksjonalitet for å søke etter entries ved bruk av søkeord
-     * foreløpig gir kun feilmeldinger hvis ingen søkeord er brukt, eller søkeord som ikke er i innhold
-     * TODO: lag en som kan søke etter entries, og test
-     *
-     * @param searchWord
+     * Søker etter DiaryEntry-objekter ved bruk av søkeord.
      */
+
     public void search(String searchWord) {
         if (searchWord == null || searchWord.isEmpty()) {
             System.out.println("Vennligst søk etter et ord");
@@ -41,13 +38,23 @@ public class Diary {
         }
     }
 
+    public boolean deleteEntry(int index) {
+        if (index < 0 || index >= entries.size()) { //hvis index er mindre enn 0, eller hvis index er mindre en mengden entries
+            return false;
+        }
+        entries.remove(index);
+        return true;
+    }
+
+    public DiaryEntry getEntry(int index) {
+        if (index < 0 || index >= entries.size()) {
+            throw new IndexOutOfBoundsException("Ugyldig indeks: " + index);
+        }
+        return entries.get(index);
+    }
 
     /**
-     * Lager nytt innlegg. Parameter valideres av DiaryEntry
-     *
-     * @param title
-     * @param author
-     * @param entry
+     * Lager nytt innlegg. Parameter valideres av DiaryEntry.
      */
 
     public void addEntry(String title, String author, String entry) {
@@ -56,21 +63,21 @@ public class Diary {
     }
 
     /**
-     * viser dagbok innlegg, hvis noen finnes
+     * Viser dagbokinnlegg, hvis noen finnes.
      */
 
-    public void showAllEntries() { //dette er for #2, skal la meg se tidligere skrevet dagbøker.
+    public void showAllEntries() { //viser tidligere innlegg.
         if (entries.isEmpty()) {
-            System.out.println("Ingen dagbokinnlegg."); //melding hvis ingen innlegg finnes
+            System.out.println("Ingen dagbokinnlegg."); // melding hvis ingen innlegg finnes
             return;
         }
-        for (DiaryEntry entry : entries) { // hvis if statementet ikke går gjennom (altså det er et inlegg)
+        for (DiaryEntry entry : entries) { // returnerer funnet innlegg.
             System.out.println(entry);
             System.out.println("---------------------------");
         }
     }
     /**
-     * skal returnere antall innlegg (feks 2 innlegg, 5 innlegg, 0 innlegg)
+     * Skal returnere antall innlegg.
      */
     public int size() {
         return entries.size();
