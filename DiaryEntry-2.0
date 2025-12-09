@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * data og strukturen for enkelte innlegg.
+ * Data og strukturen for enkelte innlegg.
  */
 
 public class DiaryEntry {
@@ -15,7 +15,7 @@ public class DiaryEntry {
 
     private static final DateTimeFormatter DISPLAY_FORMAT = DateTimeFormatter.ofPattern("dd/mm/yyyy HH:mm:ss");
 
-    public DiaryEntry(String title, String author, String entry) { //konstruktør
+    public DiaryEntry(String title, String author, String entry) {
         this.title = title;
         this.author = author;
         this.entry = entry;
@@ -23,27 +23,27 @@ public class DiaryEntry {
     }
 
     private String generateDateTime() {
-        return LocalDateTime.now().format(DISPLAY_FORMAT); //bruker systemets dato og tid for å late tidsstempel
+        return LocalDateTime.now().format(DISPLAY_FORMAT);
     }
-/**
- * Henter tittel, forfatter, dato og tid, og innhold. Getter gir lesetilgang til 'private' felt
- */
-    public String getTitle() { return title; } //en Getter, setup nødvendig for å kjøre programmet som ønsket.
+    /**
+     * Henter tittel, forfatter, dato og tid, og innhold.
+     **/
+
+    public String getTitle() { return title; }
     public String getAuthor() { return author; }
     public String getEntry() { return entry; }
     public String getDateTime() { return dateTime; }
 
 
     /**
-     * Skriver ut innlegget i lesbar format
-     * toString() brukes for når objektet blir direkte printet, gjør det enklere å vise.
-      *
+     * Returnerer innlegget som tekst
      */
-    @Override //erstatter toString() fra objekt klassen
+
+    @Override
     public String toString() {
         return "Tittel: " + title + "\n" +
                 "Forfatter: " + author + "\n" +
-                "Dato og Tid: " + dateTime + "\n" + //Dato og tid er ikke lagt til manuelt av brukeren
+                "Dato og Tid: " + dateTime + "\n" +
                 "Innhold: " + entry + "\n";
     }
 }
